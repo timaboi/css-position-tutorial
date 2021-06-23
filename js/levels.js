@@ -50,7 +50,7 @@ var levels = [
     board: "b",
     selectorForBackground: "> .blue",
     selectorForPond: "> .blue",
-    style: { position: "relative", left: "100px" },
+    style: { position: "relative", left: "100px", top: "110px" },
     before: ".butterfly.blue {\n",
     after: "}",
   },

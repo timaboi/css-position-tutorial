@@ -493,7 +493,6 @@ button:not(.disabled):hover {
   z-index: 10;
   border-radius: 0 0 0 10px;
   background-color: #1f5768;
-  padding-top: 116px;
 }
 
 #pond {
