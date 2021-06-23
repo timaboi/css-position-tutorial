@@ -48,7 +48,10 @@ var game = {
       $("#code").focus();
 
       if ($(this).hasClass("disabled")) {
-        if (!$(".frog").hasClass("animated")) {
+        // if (!$(".frog").hasClass("animated")) {
+        //   game.tryagain();
+        // }
+        if (!$(".butterfly").hasClass("animated")) {
           game.tryagain();
         }
 
@@ -56,7 +59,8 @@ var game = {
       }
 
       $(this).removeClass("animated animation");
-      $(".frog").addClass("animated bounceOutUp");
+      // $(".frog").addClass("animated bounceOutUp");
+      $(".butterfly").addClass("animated bounceOutUp");
       $(".arrow, #next").addClass("disabled");
 
       setTimeout(function () {
@@ -311,32 +315,51 @@ var game = {
 
     var string = level.board;
     var markup = "";
+    // var colors = {
+    //   g: "green",
+    //   r: "red",
+    //   y: "yellow",
+    // };
     var colors = {
-      g: "green",
-      r: "red",
+      b: "blue",
       y: "yellow",
+      c: "crimson",
     };
 
     for (var i = 0; i < string.length; i++) {
       var c = string.charAt(i);
       var color = colors[c];
 
-      var lilypad = $("<div/>")
+      // var lilypad = $("<div/>")
+      //   .addClass(
+      //     "lilypad " + color + (this.colorblind == "true" ? " cb-friendly" : "")
+      //   )
+      //   .data("color", color);
+      var flower = $("<div/>")
         .addClass(
-          "lilypad " + color + (this.colorblind == "true" ? " cb-friendly" : "")
+          "flower " + color + (this.colorblind == "true" ? " cb-friendly" : "")
         )
         .data("color", color);
-      var frog = $("<div/>")
+      var butterfly = $("<div/>")
         .addClass(
-          "frog " + color + (this.colorblind == "true" ? " cb-friendly" : "")
+          "butterfly " +
+            color +
+            (this.colorblind == "true" ? " cb-friendly" : "")
         )
         .data("color", color);
 
-      $("<div/>").addClass("bg").css(game.transform()).appendTo(lilypad);
-      $("<div/>").addClass("bg animated pulse infinite").appendTo(frog);
+      // $("<div/>").addClass("bg").css(game.transform()).appendTo(lilypad);
+      $("<div/>").addClass("bg").appendTo(flower);
+      // $("<div/>").addClass("bg animated pulse infinite").appendTo(frog);
+      $("<div/>")
+        .addClass("bg animated infinite")
+        .css(game.transform())
+        .appendTo(butterfly);
 
-      $("#background").append(lilypad);
-      $("#pond").append(frog);
+      // $("#background").append(lilypad);
+      $("#background").append(flower);
+      // $("#pond").append(frog);
+      $("#pond").append(butterfly);
     }
 
     var classes = level.classes;
@@ -347,8 +370,8 @@ var game = {
       }
     }
 
-    var selector = level.selector || "";
-    $("#background " + selector).css(level.style);
+    var selectorForBackground = level.selectorForBackground || "";
+    $("#background " + selectorForBackground).css(level.style);
 
     game.changed = false;
     game.applyStyles();
@@ -384,8 +407,8 @@ var game = {
   applyStyles: function () {
     var level = levels[game.level];
     var code = $("#code").val();
-    var selector = level.selector || "";
-    $("#pond " + selector).attr("style", code);
+    var selectorForPond = level.selectorForPond || "";
+    $("#pond" + selectorForPond).attr("style", code);
     game.saveAnswer();
   },
 
@@ -393,21 +416,45 @@ var game = {
     game.applyStyles();
 
     var level = levels[game.level];
-    var lilypads = {};
-    var frogs = {};
+    // var lilypads = {};
+    // var frogs = {};
+    var flowers = {};
+    var butterflies = {};
     var correct = true;
 
-    $(".frog").each(function () {
-      var position = $(this).position();
-      position.top = Math.floor(position.top);
-      position.left = Math.floor(position.left);
+    // $(".frog").each(function () {
+    //   var position = $(this).position();
+    //   position.top = Math.floor(position.top);
+    //   position.left = Math.floor(position.left);
 
-      var key = JSON.stringify(position);
+    //   var key = JSON.stringify(position);
+    //   var val = $(this).data("color");
+    //   frogs[key] = val;
+    // });
+    $(".butterfly").each(function () {
+      var position = $(this).position();
+      pos = {};
+      pos.top = Math.floor(position.top) + 100;
+      pos.left = Math.floor(position.left) - 60;
+
+      var key = JSON.stringify(pos);
       var val = $(this).data("color");
-      frogs[key] = val;
+      butterflies[key] = val;
     });
 
-    $(".lilypad").each(function () {
+    // $(".lilypad").each(function () {
+    //   var position = $(this).position();
+    //   position.top = Math.floor(position.top);
+    //   position.left = Math.floor(position.left);
+
+    //   var key = JSON.stringify(position);
+    //   var val = $(this).data("color");
+
+    //   if (!(key in frogs) || frogs[key] !== val) {
+    //     correct = false;
+    //   }
+    // });
+    $(".flower").each(function () {
       var position = $(this).position();
       position.top = Math.floor(position.top);
       position.left = Math.floor(position.left);
@@ -415,8 +462,9 @@ var game = {
       var key = JSON.stringify(position);
       var val = $(this).data("color");
 
-      if (!(key in frogs) || frogs[key] !== val) {
+      if (!(key in butterflies) || butterflies[key] !== val) {
         correct = false;
+        $(".butterfly .bg").removeClass("pulse");
       }
     });
 
@@ -427,6 +475,8 @@ var game = {
         eventAction: "correct",
         eventLabel: $("#code").val(),
       });
+
+      $(".butterfly .bg").addClass("pulse");
 
       if ($.inArray(level.name, game.solved) === -1) {
         game.solved.push(level.name);
@@ -461,12 +511,13 @@ var game = {
     $("#editor").hide();
     $("#code").val(solution);
     $("#share").show();
-    $(".frog .bg").removeClass("pulse").addClass("bounce");
+    // $(".frog .bg").removeClass("pulse").addClass("bounce");
+    $(".butterfly .bg").removeClass("pulse").addClass("bounce");
   },
 
   transform: function () {
     var scale = 1 + (Math.random() / 5 - 0.2);
-    var rotate = 360 * Math.random();
+    var rotate = 90 * Math.random();
 
     return { transform: "scale(" + scale + ") rotate(" + rotate + "deg)" };
   },

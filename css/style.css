@@ -202,7 +202,7 @@ pre {
 }
 
 #css {
-  height: 260px;
+  height: 420px;
   position: relative;
   padding: 10px 10px 10px 40px;
   background-color: #e0e0e0;
@@ -469,6 +469,13 @@ button:not(.disabled):hover {
   max-width: 100vh;
   max-height: 100vh;
   overflow: hidden;
+  border: 10px solid #d87b73;
+  border-radius: 10px;
+  background-color: #1f5768;
+}
+
+.overlay {
+  z-index: 50;
 }
 
 #pond,
@@ -486,21 +493,28 @@ button:not(.disabled):hover {
   z-index: 10;
   border-radius: 0 0 0 10px;
   background-color: #1f5768;
+  padding-top: 116px;
 }
 
 #pond {
   z-index: 20;
 }
 
-.lilypad,
+/* .lilypad,
 .frog {
   position: relative;
   width: 20%;
   height: 20%;
   overflow: hidden;
+} */
+.flower,
+.butterfly {
+  width: 20%;
+  height: 20%;
+  overflow: hidden;
 }
 
-.frog.bounceOutUp {
+/* .frog.bounceOutUp {
   -webkit-animation-delay: 0.6s;
   -moz-animation-delay: 0.6s;
   -ms-animation-delay: 0.6s;
@@ -539,49 +553,92 @@ button:not(.disabled):hover {
 
 .frog .bg {
   background-size: 60% 60%;
+} */
+.butterfly.bounceOutUp {
+  -webkit-animation-delay: 0.6s;
+  -moz-animation-delay: 0.6s;
+  -ms-animation-delay: 0.6s;
+  animation-delay: 0.6s;
 }
 
-.lilypad.green .bg {
-  background-image: url("../images/lilypad-green.svg");
+.butterfly .bg.bounce {
+  -webkit-animation-duration: 2s;
+  -moz-animation-duration: 2s;
+  -ms-animation-duration: 2s;
+  animation-duration: 2s;
+}
+
+.butterfly.yellow .bg.bounce {
+  -webkit-animation-delay: 0.3s;
+  -moz-animation-delay: 0.3s;
+  -ms-animation-delay: 0.3s;
+  animation-delay: 0.3s;
+}
+
+.butterfly.red .bg.bounce {
+  -webkit-animation-delay: 0.6s;
+  -moz-animation-delay: 0.6s;
+  -ms-animation-delay: 0.6s;
+  animation-delay: 0.6s;
+}
+
+.flower .bg,
+.butterfly .bg {
+  width: 100%;
+  height: 100%;
+  background-position: center center;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+.butterfly .bg {
+  background-size: 60% 60%;
+}
+
+.flower.blue .bg {
+  /* background-image: url("../images/lilypad-green.svg"); */
+  background-image: url("../images/flower-blue.svg");
 }
 
 .lilypad.green.cb-friendly .bg {
   background-image: url("../images/lilypad-green-color-assist.svg");
 }
 
-.lilypad.red .bg {
-  background-image: url("../images/lilypad-red.svg");
+.flower.yellow .bg {
+  /* background-image: url("../images/lilypad-red.svg"); */
+  background-image: url("../images/flower-yellow.svg");
 }
 
 .lilypad.red.cb-friendly .bg {
   background-image: url("../images/lilypad-red-color-assist.svg");
 }
 
-.lilypad.yellow .bg {
-  background-image: url("../images/lilypad-yellow.svg");
+.flower.crimson .bg {
+  /* background-image: url("../images/lilypad-yellow.svg"); */
+  background-image: url("../images/flower-crimson.svg");
 }
 .lilypad.yellow.cb-friendly .bg {
   background-image: url("../images/lilypad-yellow-color-assist.svg");
 }
 
-.frog.green .bg {
-  background-image: url("../images/frog-green.svg");
+.butterfly.crimson .bg {
+  background-image: url("../images/butterfly-crimson.svg");
 }
 
 .frog.green.cb-friendly .bg {
   background-image: url("../images/frog-green-color-assist.svg");
 }
 
-.frog.red .bg {
-  background-image: url("../images/frog-red.svg");
+.butterfly.yellow .bg {
+  background-image: url("../images/butterfly-yellow.svg");
 }
 
 .frog.red.cb-friendly .bg {
   background-image: url("../images/frog-red-color-assist.svg");
 }
 
-.frog.yellow .bg {
-  background-image: url("../images/frog-yellow.svg");
+.butterfly.blue .bg {
+  background-image: url("../images/butterfly-blue.svg");
 }
 
 .frog.yellow.cb-friendly .bg {
