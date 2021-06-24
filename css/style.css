@@ -469,9 +469,9 @@ button:not(.disabled):hover {
   max-width: 100vh;
   max-height: 100vh;
   overflow: auto;
-  border: 5px solid #5F3C1D;
+  border: 5px solid #5f3c1d;
   border-radius: 10px;
-  background-color: #BE9D7F;
+  background-color: #be9d7f;
 }
 
 .overlay {
@@ -482,9 +482,9 @@ button:not(.disabled):hover {
   position: relative;
 }
 
-#pond,
+#field,
 #background {
-/*  display: flex;
+  /*  display: flex;
   position: absolute;
   top: 0;
   left: 0;
@@ -493,21 +493,21 @@ button:not(.disabled):hover {
   padding: 1em;
 }
 
-#background {
+/* #background {
   display: grid;
   grid-template-columns: repeat(4, 25%);
   grid-template-rows: repeat(4, 25%);
-  position: absolute;
+  position: ;
   z-index: 10;
   /*border-radius: 0 0 0 10px;
   padding-top: 116px;*/
-}
+} */
 
-#background span{
-  border: 2px dashed #5F3C1D;
-}
+/* #background span {
+  border: 2px dashed #5f3c1d;
+} */
 
-#pond {
+#field {
   z-index: 20;
   position: relative;
 }

@@ -278,7 +278,7 @@ var game = {
   loadLevel: function (level) {
     $("#editor").show();
     $("#share").hide();
-    $("#background, #pond").removeClass("wrap").attr("style", "").empty();
+    $("#background, #field").removeClass("wrap").attr("style", "").empty();
     $("#levelsWrapper").hide();
     $(".level-marker")
       .removeClass("current")
@@ -359,7 +359,7 @@ var game = {
       // $("#background").append(lilypad);
       $("#background").append(flower);
       // $("#pond").append(frog);
-      $("#pond").append(butterfly);
+      $("#field").append(butterfly);
     }
 
     var classes = level.classes;
@@ -407,8 +407,8 @@ var game = {
   applyStyles: function () {
     var level = levels[game.level];
     var code = $("#code").val();
-    var selectorForPond = level.selectorForPond || "";
-    $("#pond" + selectorForPond).attr("style", code);
+    var selectorForField = level.selectorForField || "";
+    $("#field" + selectorForField).attr("style", code);
     game.saveAnswer();
   },
 
@@ -431,16 +431,16 @@ var game = {
     //   var val = $(this).data("color");
     //   frogs[key] = val;
     // });
-    $(".butterfly").each(function () {
-      var position = $(this).position();
-      pos = {};
-      pos.top = Math.floor(position.top) + 100;
-      pos.left = Math.floor(position.left) - 60;
+    // $(".butterfly").each(function () {
+    //   var position = $(this).position();
+    //   pos = {};
+    //   pos.top = Math.floor(position.top) + 100;
+    //   pos.left = Math.floor(position.left) - 60;
 
-      var key = JSON.stringify(pos);
-      var val = $(this).data("color");
-      butterflies[key] = val;
-    });
+    //   var key = JSON.stringify(pos);
+    //   var val = $(this).data("color");
+    //   butterflies[key] = val;
+    // });
 
     // $(".lilypad").each(function () {
     //   var position = $(this).position();
@@ -454,19 +454,26 @@ var game = {
     //     correct = false;
     //   }
     // });
-    $(".flower").each(function () {
-      var position = $(this).position();
-      position.top = Math.floor(position.top);
-      position.left = Math.floor(position.left);
+    // $(".flower").each(function () {
+    //   var position = $(this).position();
+    //   position.top = Math.floor(position.top);
+    //   position.left = Math.floor(position.left);
 
-      var key = JSON.stringify(position);
-      var val = $(this).data("color");
+    //   var key = JSON.stringify(position);
+    //   var val = $(this).data("color");
 
-      if (!(key in butterflies) || butterflies[key] !== val) {
-        correct = false;
-        $(".butterfly .bg").removeClass("pulse");
-      }
-    });
+    //   if (!(key in butterflies) || butterflies[key] !== val) {
+    //     correct = false;
+    //     $(".butterfly .bg").removeClass("pulse");
+    //   }
+    // });
+
+    var selectorForField = level.selectorForField || "";
+    var solution = JSON.stringify(level.possibleSolutions);
+    if ($("#field" + selectorForField).attr("style") !== solution) {
+      correct = false;
+      $(".butterfly .bg").removeClass("pulse");
+    }
 
     if (correct) {
       ga("send", {
