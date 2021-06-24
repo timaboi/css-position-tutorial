@@ -506,10 +506,6 @@ button:not(.disabled):hover {
   z-index: 20;
 }
 
-.flower {
-  position: absolute;
-}
-
 .flower,
 .butterfly {
   width: 20%;
