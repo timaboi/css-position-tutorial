@@ -493,15 +493,10 @@ button:not(.disabled):hover {
   padding: 1em;
 }
 
-/* #background {
-  display: grid;
-  grid-template-columns: repeat(4, 25%);
-  grid-template-rows: repeat(4, 25%);
-  position: ;
-  z-index: 10;
+#background {
   /*border-radius: 0 0 0 10px;
   padding-top: 116px;*/
-} */
+}
 
 /* #background span {
   border: 2px dashed #5f3c1d;
@@ -509,7 +504,10 @@ button:not(.disabled):hover {
 
 #field {
   z-index: 20;
-  position: relative;
+}
+
+.flower {
+  position: absolute;
 }
 
 .flower,

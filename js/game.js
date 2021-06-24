@@ -321,9 +321,9 @@ var game = {
     //   y: "yellow",
     // };
     var colors = {
-      b: "blue",
-      y: "yellow",
       c: "crimson",
+      y: "yellow",
+      b: "blue",
     };
 
     for (var i = 0; i < string.length; i++) {
@@ -357,9 +357,20 @@ var game = {
         .appendTo(butterfly);
 
       // $("#background").append(lilypad);
-      $("#background").append(flower);
+      $("#field").append(flower);
       // $("#pond").append(frog);
       $("#field").append(butterfly);
+    }
+
+    var styles = level.style;
+    for (var key in styles) {
+      var c = key;
+      var color = colors[c];
+      $(".flower").each(function () {
+        if ($(this).data("color") === color) {
+          $(`.flower.${color}`).css(styles[key]);
+        }
+      });
     }
 
     var classes = level.classes;
@@ -369,9 +380,6 @@ var game = {
         $(rule).addClass(classes[rule]);
       }
     }
-
-    var selectorForBackground = level.selectorForBackground || "";
-    $("#background " + selectorForBackground).css(level.style);
 
     game.changed = false;
     game.applyStyles();
@@ -407,8 +415,8 @@ var game = {
   applyStyles: function () {
     var level = levels[game.level];
     var code = $("#code").val();
-    var selectorForField = level.selectorForField || "";
-    $("#field" + selectorForField).attr("style", code);
+    var selectorForButterfly = level.selectorForButterfly || "";
+    $("#field" + selectorForButterfly).attr("style", code);
     game.saveAnswer();
   },
 
@@ -420,7 +428,7 @@ var game = {
     // var frogs = {};
     var flowers = {};
     var butterflies = {};
-    var correct = true;
+    var correct = false;
 
     // $(".frog").each(function () {
     //   var position = $(this).position();
@@ -468,11 +476,14 @@ var game = {
     //   }
     // });
 
-    var selectorForField = level.selectorForField || "";
-    var solution = JSON.stringify(level.possibleSolutions);
-    if ($("#field" + selectorForField).attr("style") !== solution) {
-      correct = false;
-      $(".butterfly .bg").removeClass("pulse");
+    // var selectorForField = level.selectorForField || "";
+    // var solution = level.possibleSolutions;
+    var value = $("#code").val();
+    var solutions = level.possibleSolutions;
+    for (var solution in solutions) {
+      if (value.trim() === solutions[solution]) {
+        correct = true;
+      }
     }
 
     if (correct) {
