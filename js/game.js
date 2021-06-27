@@ -1,3 +1,23 @@
+{
+  /* <div id="editor">
+        <div id="css">
+          <div class="line-numbers">
+            1<br />2<br />3<br />4<br />5<br />6<br />7<br />8<br />9<br />10<br />11<br />12<br />13<br />14<br />15<br />16<br />17<br />>
+          </div>
+          <pre id="before"></pre>
+          <textarea id="code" autofocus autocapitalize="none"></textarea>
+          <pre id="after"></pre>
+        </div>
+        <button id="next" class="translate">Next</button>
+      </div> */
+}
+
+var colors = {
+  c: "crimson",
+  y: "yellow",
+  b: "blue",
+};
+
 var game = {
   language: window.location.hash.substring(1) || "en",
   level: parseInt(localStorage.level, 10) || 0,
@@ -191,17 +211,24 @@ var game = {
   },
 
   loadLevel: function (level) {
-    $("#editor").show();
-    $("#background, #field").removeClass("wrap").attr("style", "").empty();
+    $("#background, #field, #css")
+      .removeClass("wrap")
+      .attr("style", "")
+      .empty();
     $("#levelsWrapper").hide();
     $(".level-marker")
       .removeClass("current")
       .eq(this.level)
       .addClass("current");
     $("#level-counter .current").text(this.level + 1);
-    $("#before").text(level.before);
-    $("#after").text(level.after);
     $("#next").removeClass("animated animation").addClass("disabled");
+
+    var lineNumbers = $("<div/>").addClass("line-numbers");
+    $("#css").append(lineNumbers);
+
+    for (var i = 1; i <= 17; i++) {
+      $(`<div>${i}</div>`).appendTo(lineNumbers);
+    }
 
     var instructions =
       level.instructions[game.language] || level.instructions.en;
@@ -217,39 +244,42 @@ var game = {
       $(".arrow.right").addClass("disabled");
     }
 
-    var answer = game.answers[level.name];
-    $("#code").val(answer).focus();
-
     this.loadDocs();
 
-    var lines = Object.keys(level.style).length;
-    $("#code")
-      .height(20 * lines)
-      .data("lines", lines);
+    // var lines = Object.keys(level.style).length;
+    // $("#code")
+    //   .height(20 * lines)
+    //   .data("lines", lines);
 
     var string = level.board;
-
-    var colors = {
-      c: "crimson",
-      y: "yellow",
-      b: "blue",
-    };
 
     for (var i = 0; i < string.length; i++) {
       var c = string.charAt(i);
       var color = colors[c];
 
+      var before = $("<div/>")
+        .attr("id", "before")
+        .addClass("before " + color)
+        .data("color", color);
+      $("#css").append(before);
+
+      var styleEditor = $("<textarea/>")
+        .attr("id", "code")
+        .addClass("edit " + color)
+        .data("color", color);
+      $("#css").append(styleEditor);
+
+      var after = $("<div/>")
+        .attr("id", "after")
+        .data("color", color)
+        .text(level.after);
+      $("#css").append(after);
+
       var flower = $("<div/>")
-        .addClass(
-          "flower " + color + (this.colorblind == "true" ? " cb-friendly" : "")
-        )
+        .addClass("flower " + color)
         .data("color", color);
       var butterfly = $("<div/>")
-        .addClass(
-          "butterfly " +
-            color +
-            (this.colorblind == "true" ? " cb-friendly" : "")
-        )
+        .addClass("butterfly " + color)
         .data("color", color);
 
       $("<div/>").addClass("bg").appendTo(flower);
@@ -264,24 +294,35 @@ var game = {
       // $("#field").append(butterfly);
     }
 
+    var beforeText = level.before;
+    for (var key in beforeText) {
+      var c = key;
+      var color = colors[c];
+      $(".before").each(function () {
+        if ($(this).data("color") === color) {
+          $(`.before.${color}`).text(beforeText[c]);
+        }
+      });
+    }
+
     var styles = level.style;
     for (var key in styles) {
       var c = key;
       var color = colors[c];
       $(".flower").each(function () {
         if ($(this).data("color") === color) {
-          $(`.flower.${color}`).css(styles[key]);
+          $(`.flower.${color}`).css(styles[c]);
         }
       });
     }
 
-    var classes = level.classes;
+    // var classes = level.classes;
 
-    if (classes) {
-      for (var rule in classes) {
-        $(rule).addClass(classes[rule]);
-      }
-    }
+    // if (classes) {
+    //   for (var rule in classes) {
+    //     $(rule).addClass(classes[rule]);
+    //   }
+    // }
 
     game.changed = false;
     game.applyStyles();
@@ -316,9 +357,18 @@ var game = {
 
   applyStyles: function () {
     var level = levels[game.level];
-    var code = $("#code").val();
-    var selectorForButterfly = level.selectorForButterfly || "";
-    $("#field" + selectorForButterfly).attr("style", code);
+    var string = level.board;
+
+    for (var i = 0; i < string.length; i++) {
+      var c = string.charAt(i);
+      var color = colors[c];
+      $(".edit").each(function () {
+        if ($(this).data("color") === color) {
+          var code = $(".edit").val();
+          $(`.flower.${color}`).attr("style", code);
+        }
+      });
+    }
     game.saveAnswer();
   },
 
