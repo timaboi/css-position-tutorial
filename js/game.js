@@ -1,8 +1,5 @@
 var game = {
-  colorblind:
-    (localStorage.colorblind && JSON.parse(localStorage.colorblind)) || "false",
   language: window.location.hash.substring(1) || "en",
-  difficulty: "easy",
   level: parseInt(localStorage.level, 10) || 0,
   answers: (localStorage.answers && JSON.parse(localStorage.answers)) || {},
   solved: (localStorage.solved && JSON.parse(localStorage.solved)) || [],
@@ -10,8 +7,6 @@ var game = {
   changed: false,
 
   start: function () {
-    // navigator.language can include '-'
-    // ref: https://developer.mozilla.org/en-US/docs/Web/API/NavigatorLanguage/language
     var requestLang = window.navigator.language.split("-")[0];
     if (
       window.location.hash === "" &&
@@ -25,12 +20,6 @@ var game = {
     game.translate();
     $("#level-counter .total").text(levels.length);
     $("#editor").show();
-    $("#share").hide();
-    $("#language").val(game.language);
-    $('input[value="' + game.colorblind + '"]', "#colorblind").prop(
-      "checked",
-      true
-    );
 
     if (!localStorage.user) {
       game.user =
@@ -48,18 +37,13 @@ var game = {
       $("#code").focus();
 
       if ($(this).hasClass("disabled")) {
-        // if (!$(".frog").hasClass("animated")) {
-        //   game.tryagain();
-        // }
         if (!$(".butterfly").hasClass("animated")) {
           game.tryagain();
         }
-
         return;
       }
 
       $(this).removeClass("animated animation");
-      // $(".frog").addClass("animated bounceOutUp");
       $(".butterfly").addClass("animated bounceOutUp");
       $(".arrow, #next").addClass("disabled");
 
@@ -126,58 +110,6 @@ var game = {
       }
     });
 
-    $("#labelSettings").on("click", function () {
-      $("#levelsWrapper").hide();
-      $("#settings .tooltip").toggle();
-    });
-
-    $("#language").on("change", function () {
-      window.location.hash = $(this).val();
-    });
-
-    $("#difficulty").on("change", function () {
-      game.difficulty = $("input:checked", "#difficulty").val();
-
-      // setting height will prevent a slight jump when the animation starts
-      var $instructions = $("#instructions");
-      var height = $instructions.height();
-      $instructions.css("height", height);
-
-      var $markers = $(".level-marker");
-
-      if (game.difficulty == "hard" || game.difficulty == "medium") {
-        $instructions.slideUp();
-
-        $markers.each(function () {
-          var $marker = $(this);
-          if ($marker[0].hasAttribute("title")) {
-            $marker.attr("data-title", $marker.attr("title"));
-            $marker.removeAttr("title");
-          }
-        });
-      } else {
-        $instructions.css("height", "").slideDown();
-
-        $markers.each(function () {
-          var $marker = $(this);
-          if ($marker[0].hasAttribute("data-title")) {
-            $marker.attr("title", $marker.attr("data-title"));
-            $marker.removeAttr("data-title");
-          }
-        });
-      }
-    });
-
-    $("#colorblind").on("change", function () {
-      game.colorblind = $("input:checked", "#colorblind").val();
-
-      if (game.colorblind == "true") {
-        $(".lilypad, .frog").addClass("cb-friendly");
-      } else {
-        $(".lilypad, .frog").removeClass("cb-friendly");
-      }
-    });
-
     $("body").on("click", function () {
       $(".tooltip").hide();
     });
@@ -186,29 +118,12 @@ var game = {
       e.stopPropagation();
     });
 
-    $(window)
-      .on("beforeunload", function () {
-        game.saveAnswer();
-        localStorage.setItem("level", game.level);
-        localStorage.setItem("answers", JSON.stringify(game.answers));
-        localStorage.setItem("solved", JSON.stringify(game.solved));
-        localStorage.setItem("colorblind", JSON.stringify(game.colorblind));
-      })
-      .on("hashchange", function () {
-        game.language = window.location.hash.substring(1) || "en";
-        game.translate();
-
-        $("#tweet iframe").remove();
-        var html =
-          '<a href="https://twitter.com/share" class="twitter-share-button"{count} data-url="https://flexboxfroggy.com" data-via="thomashpark">Tweet</a> ' +
-          '<a href="https://twitter.com/thomashpark" class="twitter-follow-button" data-show-count="false">Follow @thomashpark</a>';
-        $("#tweet").html(html);
-        twttr.widgets.load();
-
-        if (game.language === "en") {
-          history.replaceState({}, document.title, "./");
-        }
-      });
+    $(window).on("beforeunload", function () {
+      game.saveAnswer();
+      localStorage.setItem("level", game.level);
+      localStorage.setItem("answers", JSON.stringify(game.answers));
+      localStorage.setItem("solved", JSON.stringify(game.solved));
+    });
   },
 
   prev: function () {
@@ -277,8 +192,7 @@ var game = {
 
   loadLevel: function (level) {
     $("#editor").show();
-    $("#share").hide();
-    $("#background, #pond").removeClass("wrap").attr("style", "").empty();
+    $("#background, #field").removeClass("wrap").attr("style", "").empty();
     $("#levelsWrapper").hide();
     $(".level-marker")
       .removeClass("current")
@@ -314,27 +228,17 @@ var game = {
       .data("lines", lines);
 
     var string = level.board;
-    var markup = "";
-    // var colors = {
-    //   g: "green",
-    //   r: "red",
-    //   y: "yellow",
-    // };
+
     var colors = {
-      b: "blue",
-      y: "yellow",
       c: "crimson",
+      y: "yellow",
+      b: "blue",
     };
 
     for (var i = 0; i < string.length; i++) {
       var c = string.charAt(i);
       var color = colors[c];
 
-      // var lilypad = $("<div/>")
-      //   .addClass(
-      //     "lilypad " + color + (this.colorblind == "true" ? " cb-friendly" : "")
-      //   )
-      //   .data("color", color);
       var flower = $("<div/>")
         .addClass(
           "flower " + color + (this.colorblind == "true" ? " cb-friendly" : "")
@@ -348,18 +252,27 @@ var game = {
         )
         .data("color", color);
 
-      // $("<div/>").addClass("bg").css(game.transform()).appendTo(lilypad);
       $("<div/>").addClass("bg").appendTo(flower);
-      // $("<div/>").addClass("bg animated pulse infinite").appendTo(frog);
+
       $("<div/>")
         .addClass("bg animated infinite")
         .css(game.transform())
         .appendTo(butterfly);
 
-      // $("#background").append(lilypad);
-      $("#background").append(flower);
-      // $("#pond").append(frog);
-      $("#pond").append(butterfly);
+      $("#field").append(flower);
+
+      // $("#field").append(butterfly);
+    }
+
+    var styles = level.style;
+    for (var key in styles) {
+      var c = key;
+      var color = colors[c];
+      $(".flower").each(function () {
+        if ($(this).data("color") === color) {
+          $(`.flower.${color}`).css(styles[key]);
+        }
+      });
     }
 
     var classes = level.classes;
@@ -369,9 +282,6 @@ var game = {
         $(rule).addClass(classes[rule]);
       }
     }
-
-    var selectorForBackground = level.selectorForBackground || "";
-    $("#background " + selectorForBackground).css(level.style);
 
     game.changed = false;
     game.applyStyles();
@@ -407,8 +317,8 @@ var game = {
   applyStyles: function () {
     var level = levels[game.level];
     var code = $("#code").val();
-    var selectorForPond = level.selectorForPond || "";
-    $("#pond" + selectorForPond).attr("style", code);
+    var selectorForButterfly = level.selectorForButterfly || "";
+    $("#field" + selectorForButterfly).attr("style", code);
     game.saveAnswer();
   },
 
@@ -416,57 +326,18 @@ var game = {
     game.applyStyles();
 
     var level = levels[game.level];
-    // var lilypads = {};
-    // var frogs = {};
+
     var flowers = {};
     var butterflies = {};
-    var correct = true;
+    var correct = false;
 
-    // $(".frog").each(function () {
-    //   var position = $(this).position();
-    //   position.top = Math.floor(position.top);
-    //   position.left = Math.floor(position.left);
-
-    //   var key = JSON.stringify(position);
-    //   var val = $(this).data("color");
-    //   frogs[key] = val;
-    // });
-    $(".butterfly").each(function () {
-      var position = $(this).position();
-      pos = {};
-      pos.top = Math.floor(position.top) + 100;
-      pos.left = Math.floor(position.left) - 60;
-
-      var key = JSON.stringify(pos);
-      var val = $(this).data("color");
-      butterflies[key] = val;
-    });
-
-    // $(".lilypad").each(function () {
-    //   var position = $(this).position();
-    //   position.top = Math.floor(position.top);
-    //   position.left = Math.floor(position.left);
-
-    //   var key = JSON.stringify(position);
-    //   var val = $(this).data("color");
-
-    //   if (!(key in frogs) || frogs[key] !== val) {
-    //     correct = false;
-    //   }
-    // });
-    $(".flower").each(function () {
-      var position = $(this).position();
-      position.top = Math.floor(position.top);
-      position.left = Math.floor(position.left);
-
-      var key = JSON.stringify(position);
-      var val = $(this).data("color");
-
-      if (!(key in butterflies) || butterflies[key] !== val) {
-        correct = false;
-        $(".butterfly .bg").removeClass("pulse");
+    var value = $("#code").val();
+    var solutions = level.possibleSolutions;
+    for (var solution in solutions) {
+      if (value.trim() === solutions[solution]) {
+        correct = true;
       }
-    });
+    }
 
     if (correct) {
       ga("send", {
@@ -510,8 +381,7 @@ var game = {
 
     $("#editor").hide();
     $("#code").val(solution);
-    $("#share").show();
-    // $(".frog .bg").removeClass("pulse").addClass("bounce");
+
     $(".butterfly .bg").removeClass("pulse").addClass("bounce");
   },
 
