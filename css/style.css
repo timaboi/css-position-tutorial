@@ -319,6 +319,14 @@ pre {
   background-color: rgba(255, 255, 255, 0.4);
 }
 
+#html {
+  white-space: pre-wrap;
+  padding-bottom: 1em;
+  font-family: "Source Code Pro", monospace;
+  font-size: 16px;
+  font-weight: 600;
+}
+
 #labelReset {
   margin-top: 1em;
   text-align: center;
@@ -507,7 +515,7 @@ button:not(.disabled):hover {
 #field {
   z-index: 20;
   position: relative;
-  background-color: #BE9D7F;
+  background-color: #be9d7f;
   background-image: url("../images/bg.svg");
 }
 
@@ -516,6 +524,7 @@ button:not(.disabled):hover {
   width: 24%;
   height: 24%;
   overflow: hidden;
+  /* margin-bottom: 0.7em; */
 }
 
 .butterfly.bounceOutUp {
@@ -577,16 +586,16 @@ button:not(.disabled):hover {
   background-image: url("../images/lilypad-red-color-assist.svg");
 }
 
-.flower.crimson .bg {
+.flower.red .bg {
   /* background-image: url("../images/lilypad-yellow.svg"); */
-  background-image: url("../images/flower-crimson.svg");
+  background-image: url("../images/flower-red.svg");
 }
 .lilypad.yellow.cb-friendly .bg {
   background-image: url("../images/lilypad-yellow-color-assist.svg");
 }
 
-.butterfly.crimson .bg {
-  background-image: url("../images/butterfly-crimson.svg");
+.butterfly.red .bg {
+  background-image: url("../images/butterfly-red.svg");
 }
 
 .frog.green.cb-friendly .bg {
@@ -688,10 +697,9 @@ button:not(.disabled):hover {
 @media (min-width: 316px) and (max-width: 768px) {
 }
 
-
 @media (min-width: 316px) and (max-width: 1150px) {
   #field {
-    background-color: #BE9D7F;
+    background-color: #be9d7f;
     background-image: url("../images/bg.svg");
     background-size: 25%;
   }
