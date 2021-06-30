@@ -7,10 +7,24 @@ var levels = [
       "<div class='flower'></div>\n<div class='flower'></div>\n<div class='flower'></div>",
     instructionsAfter:
       "<p>В CSS можно добавить для цветов статическое позиционирование, (position: static):</p>",
-    board: "rby",
-    possibleSolutions: {
-      b: "position: static",
+    board: "bbb",
+    positionSolutions: {
+      b: "static",
+      y: "relative",
+      r: "relative",
     },
+
+    // topSolutions: {
+    //   b: "100px",
+    //   y: "20px",
+    //   r: "35px",
+    // },
+
+    // leftSolutions: {
+    //   b: "50px",
+    //   y: "100px",
+    //   r: "40px",
+    // },
     before: {
       b: ".flower.blue {",
       y: ".flower.yellow {",

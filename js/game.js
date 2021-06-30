@@ -20,14 +20,14 @@ var game = {
       localStorage.setItem("user", game.user);
     }
 
-    this.setHandlers();
     this.loadMenu();
     game.loadLevel(levels[game.level]);
+    this.setHandlers();
   },
 
   setHandlers: function () {
     $("#next").on("click", function () {
-      $("#code").focus();
+      $(".edit").focus();
 
       if ($(this).hasClass("disabled")) {
         if (!$(".butterfly").hasClass("animated")) {
@@ -46,11 +46,11 @@ var game = {
         } else {
           game.next();
         }
-      }, 2000);
+      }, 1000);
     });
 
-    $("#code")
-      .on("keydown", function (e) {
+    $(".edit").each(function () {
+      $(this).on("keydown", function (e) {
         if (e.keyCode === 13) {
           if (e.ctrlKey || e.metaKey) {
             e.preventDefault();
@@ -74,12 +74,13 @@ var game = {
             }
           }
         }
-      })
-      .on("input", game.debounce(game.check, 500))
-      .on("input", function () {
+      });
+      $(this).on("input", game.debounce(game.check, 500));
+      $(this).on("input", function () {
         game.changed = true;
         $("#next").removeClass("animated animation").addClass("disabled");
       });
+    });
 
     $("#editor").on(
       "webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend",
@@ -314,24 +315,58 @@ var game = {
     }
   },
 
-  check: setInterval(function () {
+  check: function () {
     game.applyStyles();
 
     var level = levels[game.level];
+    var pos = true;
+    var top = true;
+    var left = true;
+    var correct = true;
 
-    var correct = false;
-
-    var solutions = level.possibleSolutions;
-    for (var key in solutions) {
+    var positionSolutions = level.positionSolutions;
+    for (var key in positionSolutions) {
       var c = key;
       var color = colors[c];
-      $(".edit").each(function () {
-        var value = $(this).val();
-        if ($(this).data("color") === color && value.trim() === solutions[c]) {
-          correct = true;
+      $(".flower").each(function () {
+        if (
+          $(this).data("color") === color &&
+          $(this).css("position") !== positionSolutions[c]
+        ) {
+          pos = false;
         }
       });
     }
+
+    var topSolutions = level.topSolutions;
+    for (var key in topSolutions) {
+      var c = key;
+      var color = colors[c];
+      $(".flower").each(function () {
+        if (
+          $(this).data("color") === color &&
+          $(this).css("top") !== topSolutions[c]
+        ) {
+          top = false;
+        }
+      });
+    }
+
+    var leftSolutions = level.leftSolutions;
+    for (var key in leftSolutions) {
+      var c = key;
+      var color = colors[c];
+      $(".flower").each(function () {
+        if (
+          $(this).data("color") === color &&
+          $(this).css("left") !== leftSolutions[c]
+        ) {
+          left = false;
+        }
+      });
+    }
+
+    if (!pos || !top || !left) correct = false;
 
     if (correct) {
       ga("send", {
@@ -341,7 +376,7 @@ var game = {
         eventLabel: $(".edit").val(),
       });
 
-      $(".butterfly .bg").addClass("pulse");
+      // $(".butterfly .bg").addClass("pulse");
 
       if ($.inArray(level.name, game.solved) === -1) {
         game.solved.push(level.name);
@@ -357,19 +392,19 @@ var game = {
         eventLabel: $(".edit").val(),
       });
     }
-  }, 1000),
+  },
 
   tryagain: function () {
     $("#editor").addClass("animated shake");
   },
 
   win: function () {
-    var solution = $("#code").val();
+    var solution = $(".edit").val();
 
     this.loadLevel(levelWin);
 
     $("#editor").hide();
-    $("#code").val(solution);
+    $(".edit").val(solution);
 
     $(".butterfly .bg").removeClass("pulse").addClass("bounce");
   },

@@ -516,9 +516,8 @@ button:not(.disabled):hover {
 #field {
   z-index: 20;
   position: relative;
-  background-color: #BE9D7F;
+  background-color: #be9d7f;
   background-image: url("../images/bg.svg");
-
 }
 
 .flower,
@@ -624,7 +623,6 @@ button:not(.disabled):hover {
   flex-wrap: wrap;
 }
 
-
 /* Native by BuySellAds */
 .native-ad {
   display: block;
@@ -696,7 +694,8 @@ button:not(.disabled):hover {
     display: none;
   }
 
-  .flower, .butterfly {
+  .flower,
+  .butterfly {
     width: 69px;
     height: 69px;
     overflow: hidden;
@@ -704,9 +703,9 @@ button:not(.disabled):hover {
   }
 }
 
-
 @media (min-width: 768px) and (max-width: 1130px) {
-  .flower, .butterfly {
+  .flower,
+  .butterfly {
     min-width: 65px;
     min-height: 65px;
     width: 8vw;
@@ -721,5 +720,3 @@ button:not(.disabled):hover {
     background-size: 25%;
   }
 }
-
-
