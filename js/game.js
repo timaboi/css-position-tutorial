@@ -261,38 +261,57 @@ var game = {
 
     var beforeText = level.before;
     for (var key in beforeText) {
-      var c = key;
-      var color = colors[c];
+      var color = colors[key];
       $(".before").each(function () {
         if ($(this).data("color") === color) {
-          $(`.before.${color}`).text(beforeText[c]);
+          $(`.before.${color}`).text(beforeText[key]);
         }
       });
     }
 
-    var lines = 1;
-    $(".edit")
-      .height(20 * lines)
-      .data("lines", lines);
+    var obj = { b: 0, y: 0, r: 0 };
 
-    // var styles = level.style;
-    // for (var key in styles) {
-    //   var c = key;
-    //   var color = colors[c];
-    //   $(".flower").each(function () {
-    //     if ($(this).data("color") === color) {
-    //       $(`.flower.${color}`).css(styles[c]);
-    //     }
-    //   });
-    // }
+    var positionSolutions = level.positionSolutions;
+    for (var key in positionSolutions) {
+      var color = colors[key];
+      $(".edit").each(function () {
+        if ($(this).data("color") === color) {
+          obj[key]++;
+        }
+      });
+    }
 
-    // var classes = level.classes;
+    var topSolutions = level.topSolutions;
+    for (var key in topSolutions) {
+      var color = colors[key];
+      $(".edit").each(function () {
+        if ($(this).data("color") === color) {
+          obj[key]++;
+        }
+      });
+    }
 
-    // if (classes) {
-    //   for (var rule in classes) {
-    //     $(rule).addClass(classes[rule]);
-    //   }
-    // }
+    var leftSolutions = level.leftSolutions;
+    for (var key in leftSolutions) {
+      var color = colors[key];
+      $(".edit").each(function () {
+        if ($(this).data("color") === color) {
+          obj[key]++;
+        }
+      });
+    }
+
+    for (var key in obj) {
+      var color = colors[key];
+      $(".edit").each(function () {
+        if ($(this).data("color") === color) {
+          var lines = obj[key];
+          $(this)
+            .height(20 * lines)
+            .data("lines", lines);
+        }
+      });
+    }
 
     game.changed = false;
     game.applyStyles();
@@ -326,12 +345,11 @@ var game = {
 
     var positionSolutions = level.positionSolutions;
     for (var key in positionSolutions) {
-      var c = key;
-      var color = colors[c];
+      var color = colors[key];
       $(".flower").each(function () {
         if (
           $(this).data("color") === color &&
-          $(this).css("position") !== positionSolutions[c]
+          $(this).css("position") !== positionSolutions[key]
         ) {
           pos = false;
         }
@@ -340,12 +358,11 @@ var game = {
 
     var topSolutions = level.topSolutions;
     for (var key in topSolutions) {
-      var c = key;
-      var color = colors[c];
+      var color = colors[key];
       $(".flower").each(function () {
         if (
           $(this).data("color") === color &&
-          $(this).css("top") !== topSolutions[c]
+          $(this).css("top") !== topSolutions[key]
         ) {
           top = false;
         }
@@ -354,12 +371,11 @@ var game = {
 
     var leftSolutions = level.leftSolutions;
     for (var key in leftSolutions) {
-      var c = key;
-      var color = colors[c];
+      var color = colors[key];
       $(".flower").each(function () {
         if (
           $(this).data("color") === color &&
-          $(this).css("left") !== leftSolutions[c]
+          $(this).css("left") !== leftSolutions[key]
         ) {
           left = false;
         }
