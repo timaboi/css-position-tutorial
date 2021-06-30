@@ -382,6 +382,90 @@ var game = {
       });
     }
 
+    for (var key in positionSolutions) {
+      var color = colors[key];
+      $(".edit").each(function () {
+        if (
+          $(this).data("color") === color &&
+          $(this).css("position") !== positionSolutions[key]
+        ) {
+          $(`.edit.${color}`).addClass("mistaken");
+        }
+      });
+    }
+
+    for (var key in topSolutions) {
+      var color = colors[key];
+      $(".edit").each(function () {
+        if (
+          $(this).data("color") === color &&
+          $(this).css("top") !== topSolutions[key]
+        ) {
+          $(`.edit.${color}`).addClass("mistaken");
+        }
+      });
+    }
+
+    for (var key in leftSolutions) {
+      var color = colors[key];
+      $(".edit").each(function () {
+        if (
+          $(this).data("color") === color &&
+          $(this).css("left") !== leftSolutions[key]
+        ) {
+          $(`.edit.${color}`).addClass("mistaken");
+        }
+      });
+    }
+
+    for (var key in positionSolutions) {
+      var color = colors[key];
+      $(".edit").each(function () {
+        if (
+          $(this).data("color") === color &&
+          $(this).css("position") === positionSolutions[key]
+        ) {
+          $(`.edit.${color}`).removeClass("mistaken");
+        }
+      });
+    }
+
+    for (var key in positionSolutions) {
+      var color = colors[key];
+      $(".edit").each(function () {
+        if (
+          $(this).data("color") === color &&
+          $(this).css("position") === positionSolutions[key]
+        ) {
+          $(`.edit.${color}`).removeClass("mistaken");
+        }
+      });
+    }
+
+    for (var key in topSolutions) {
+      var color = colors[key];
+      $(".edit").each(function () {
+        if (
+          $(this).data("color") === color &&
+          $(this).css("top") === topSolutions[key]
+        ) {
+          $(`.edit.${color}`).removeClass("mistaken");
+        }
+      });
+    }
+
+    for (var key in leftSolutions) {
+      var color = colors[key];
+      $(".edit").each(function () {
+        if (
+          $(this).data("color") === color &&
+          $(this).css("left") === leftSolutions[key]
+        ) {
+          $(`.edit.${color}`).removeClass("mistaken");
+        }
+      });
+    }
+
     if (!pos || !top || !left) correct = false;
 
     if (correct) {

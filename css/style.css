@@ -429,6 +429,10 @@ button:not(.disabled):hover {
   position: relative;
 }
 
+.mistaken {
+  border: solid 1px orange;
+}
+
 .toggle {
   display: inline-block;
   padding: 1px 8px;
